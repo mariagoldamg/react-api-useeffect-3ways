@@ -1,23 +1,57 @@
-import logo from './logo.svg';
+
+import { useCallback, useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
+  const [quote, setQuote] = useState('');
+  const [author, setAuthor] = useState('')
+
+
+// WAY 1 the best one
+/*
+  useEffect(()=>{
+    const getQuote = async()=>{
+      const response = await fetch('https://api.quotable.io/random ');
+      const data = await response.json();
+      setQuote(data.content);
+      setAuthor (data.author)
+    }
+    getQuote()
+  }, [])
+*/
+
+//WAY 2
+/*
+useEffect(()=>{
+  getQuote()
+},[])
+
+const getQuote = async() =>{
+  const response = await fetch ('https://api.quotable.io/random ');
+  const data = await response.json();
+  setQuote(data.content);
+  setAuthor (data.author)
+}
+*/
+
+//WAY 3
+
+const getQuote = useCallback (async()=>{
+  const response = await fetch ('https://api.quotable.io/random ');
+  const data = await response.json();
+  setQuote(data.content);
+  setAuthor (data.author)
+},[])
+
+useEffect(()=>{
+getQuote()
+},[getQuote])
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+<h2>{quote}</h2>
+<h3>{author}</h3>
     </div>
   );
 }
